@@ -164,6 +164,7 @@ class FantasyWestward:
 
     async def paddle_ocr(self, img_path: str):
         result_question = self.__paddle_ocr.ocr(img_path, cls=True)
+        print(result_question)
         if result_question is not None and len(result_question) > 0:
             question = result_question[0][0][1][0]
             return question

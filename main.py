@@ -7,7 +7,7 @@ from FantasyWestward import FantasyWestward
 
 
 async def main(host: str, port: int):
-    COUNT = 100
+    COUNT = 50
 
     """
     0.初始化，将答案放入矢量库
@@ -25,11 +25,16 @@ async def main(host: str, port: int):
         await fantasy_west.init_paddle_ocr()
 
         while (COUNT > 0):
+            t1 = time.time()
+
             COUNT -= 1
-            print('scan')
+            print(f'scan count: {COUNT}')
             screenshot_image = './image/screenshot/screenshot.png'
-            await fantasy_west.screenshot(host, port)
+            await fantasy_west.screenshot(screenshot_image)
+
             crop_image = await fantasy_west.read_image(screenshot_image)
+
+            print("crop image")
             img_path = './image/crop/crop_image.jpg'
             cv2.imwrite(img_path, crop_image)
 
@@ -38,13 +43,12 @@ async def main(host: str, port: int):
             # question_result = await fantasy_west.query_question(question)
             # print(question_result)
             answers = await fantasy_west.baidu_search(question)
-            print(answers)
             for answer in answers:
                 print(answer)
+                print(20 * '_')
+            t2 = time.time()
+            print(f"spend seconds {t2 - t1}")
 
 
 if __name__ == '__main__':
-    t1 = time.time()
     asyncio.run(main('127.0.0.1', 16384))
-    t2 = time.time()
-    print(t2 - t1)
